@@ -1,26 +1,29 @@
-var arr = [[11,21], [5,12], [1,4], [0,3]];
-var b = [];
-
-for(var i=0; i<arr.length; i++) {
-    for(var j=0; j<arr.length-i; j++) {
-        if(j<arr.length-1) {
-          if (arr[j][0]>arr[j+1][0]) {
-            var temp = arr[j];
-            arr[j] = arr[j+1];
-            arr[j+1] = temp;
-          }
-        }
+function mergeIntervals(intervals) {
+    if(intervals.length <= 1)
+      return intervals;
+  
+    var stack = [];
+    var top   = null;
+  
+    intervals = intervals.sort();
+  
+    stack.push(intervals[0]);
+  
+    for (var i = 1; i < intervals.length; i++) {
+      top = stack[stack.length - 1];
+      if (top[1] < intervals[i][0]) {
+        stack.push(intervals[i]);
+      }
+      else if (top[1] < intervals[i][1])
+      {
+        top[1] = intervals[i][1];
+        stack.pop();
+        stack.push(top);
+      }
     }
-}
-
-for(i=0; i<arr.length; i++) {
-    if((arr[i][1] > arr[i+1][0]) && (arr[i][1] < arr[i+1][1])) {
-        b.push([arr[i][0],arr[i+1][1]]);
-        i++;
-    }
-    else {
-      b.push(arr[i]);
-    }
-}
-
-console.log(b);
+  
+    return stack;
+  }
+  
+  var x = [[1,4],[3,5],[2,4],[7,10]];
+  console.log(mergeIntervals(x));
